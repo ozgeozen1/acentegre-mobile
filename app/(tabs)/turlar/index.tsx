@@ -1,6 +1,8 @@
 import { useState, useMemo } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useTurlar } from '@/src/hooks/queries';
 import SearchBar from '@/components/ui/SearchBar';
 import EmptyState from '@/components/ui/EmptyState';
@@ -48,6 +50,10 @@ export default function TurlarScreen() {
         ListEmptyComponent={<EmptyState icon="briefcase-outline" message="Tur bulunamadı" />}
         renderItem={({ item }) => <TourCard tour={item} />}
       />
+      {/* FAB */}
+      <Pressable style={styles.fab} onPress={() => router.push('/(tabs)/turlar/ekle')}>
+        <Ionicons name="add" size={28} color="#fff" />
+      </Pressable>
     </View>
   );
 }
@@ -56,34 +62,48 @@ function TourCard({ tour }: { tour: Tour }) {
   const isYurtdisi = tour.yurtici_disi?.toLowerCase().includes('dışı') || tour.yurtici_disi?.toLowerCase().includes('disi');
   return (
     <View style={styles.card}>
-      <View style={styles.cardTop}>
-        <Text style={styles.tourName} numberOfLines={2}>{tour.isim}</Text>
-        <View style={[styles.aktivBadge, { backgroundColor: tour.aktif ? Colors.success + '20' : Colors.textMuted + '20' }]}>
-          <Text style={[styles.aktivText, { color: tour.aktif ? Colors.success : Colors.textMuted }]}>
-            {tour.aktif ? 'Aktif' : 'Pasif'}
-          </Text>
+      {tour.gorsel ? (
+        <Image
+          source={{ uri: tour.gorsel }}
+          style={styles.cardImage}
+          contentFit="cover"
+          transition={200}
+        />
+      ) : (
+        <View style={styles.cardImagePlaceholder}>
+          <Ionicons name="image-outline" size={32} color={Colors.border} />
         </View>
-      </View>
-      <Text style={styles.tourCode}>{tour.tur_kodu}</Text>
-      <View style={styles.badges}>
-        <View style={[styles.badge, { backgroundColor: isYurtdisi ? Colors.primaryLight + '15' : Colors.success + '15' }]}>
-          <Text style={[styles.badgeText, { color: isYurtdisi ? Colors.primaryLight : Colors.success }]}>
-            {isYurtdisi ? 'Yurtdışı' : 'Yurtiçi'}
-          </Text>
+      )}
+      <View style={styles.cardBody}>
+        <View style={styles.cardTop}>
+          <Text style={styles.tourName} numberOfLines={2}>{tour.isim}</Text>
+          <View style={[styles.aktivBadge, { backgroundColor: tour.aktif ? Colors.success + '20' : Colors.textMuted + '20' }]}>
+            <Text style={[styles.aktivText, { color: tour.aktif ? Colors.success : Colors.textMuted }]}>
+              {tour.aktif ? 'Aktif' : 'Pasif'}
+            </Text>
+          </View>
         </View>
-        {tour.gece_sayisi != null && (
-          <View style={[styles.badge, { backgroundColor: Colors.primary + '15' }]}>
-            <Ionicons name="moon-outline" size={12} color={Colors.primary} />
-            <Text style={[styles.badgeText, { color: Colors.primary, marginLeft: 4 }]}>{tour.gece_sayisi} Gece</Text>
+        <Text style={styles.tourCode}>{tour.tur_kodu}</Text>
+        <View style={styles.badges}>
+          <View style={[styles.badge, { backgroundColor: isYurtdisi ? Colors.primaryLight + '15' : Colors.success + '15' }]}>
+            <Text style={[styles.badgeText, { color: isYurtdisi ? Colors.primaryLight : Colors.success }]}>
+              {isYurtdisi ? 'Yurtdışı' : 'Yurtiçi'}
+            </Text>
+          </View>
+          {tour.gece_sayisi != null && (
+            <View style={[styles.badge, { backgroundColor: Colors.primary + '15' }]}>
+              <Ionicons name="moon-outline" size={12} color={Colors.primary} />
+              <Text style={[styles.badgeText, { color: Colors.primary, marginLeft: 4 }]}>{tour.gece_sayisi} Gece</Text>
+            </View>
+          )}
+        </View>
+        {tour.kalkis_sehir && (
+          <View style={styles.locationRow}>
+            <Ionicons name="location" size={13} color={Colors.primary} />
+            <Text style={styles.locationText}>{tour.kalkis_sehir}</Text>
           </View>
         )}
       </View>
-      {tour.kalkis_sehir && (
-        <View style={styles.locationRow}>
-          <Ionicons name="location" size={13} color={Colors.primary} />
-          <Text style={styles.locationText}>{tour.kalkis_sehir}</Text>
-        </View>
-      )}
     </View>
   );
 }
@@ -98,11 +118,25 @@ const styles = StyleSheet.create({
   list: { padding: Spacing.md, paddingTop: 0 },
   card: {
     backgroundColor: Colors.surface,
-    borderRadius: Radius.md,
-    padding: Spacing.md,
-    marginBottom: Spacing.sm,
+    borderRadius: Radius.lg,
+    marginBottom: Spacing.md,
     borderWidth: 1.5,
     borderColor: '#4a4a4a',
+    overflow: 'hidden',
+  },
+  cardImage: {
+    width: '100%',
+    height: 160,
+  },
+  cardImagePlaceholder: {
+    width: '100%',
+    height: 100,
+    backgroundColor: Colors.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardBody: {
+    padding: Spacing.md,
   },
   cardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 },
   tourName: { fontSize: FontSize.md, fontWeight: '600', color: Colors.textPrimary, flex: 1, marginRight: Spacing.sm },
@@ -114,4 +148,20 @@ const styles = StyleSheet.create({
   aktivText: { fontSize: 11, fontWeight: '600' },
   locationRow: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: Colors.primary + '12', paddingHorizontal: 8, paddingVertical: 4, borderRadius: Radius.full, alignSelf: 'flex-start' },
   locationText: { fontSize: FontSize.xs, color: Colors.primary, fontWeight: '600' },
+  fab: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: Colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
 });

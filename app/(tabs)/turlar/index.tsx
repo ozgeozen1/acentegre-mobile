@@ -80,7 +80,7 @@ function TourCard({ tour }: { tour: Tour }) {
       </View>
       {tour.kalkis_sehir && (
         <View style={styles.locationRow}>
-          <Ionicons name="location-outline" size={14} color={Colors.textMuted} />
+          <Ionicons name="location" size={13} color={Colors.primary} />
           <Text style={styles.locationText}>{tour.kalkis_sehir}</Text>
         </View>
       )}
@@ -112,6 +112,6 @@ const styles = StyleSheet.create({
   badgeText: { fontSize: 11, fontWeight: '600' },
   aktivBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full },
   aktivText: { fontSize: 11, fontWeight: '600' },
-  locationRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  locationText: { fontSize: FontSize.xs, color: Colors.textMuted },
+  locationRow: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: Colors.primary + '12', paddingHorizontal: 8, paddingVertical: 4, borderRadius: Radius.full, alignSelf: 'flex-start' },
+  locationText: { fontSize: FontSize.xs, color: Colors.primary, fontWeight: '600' },
 });

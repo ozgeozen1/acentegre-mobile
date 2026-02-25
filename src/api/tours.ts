@@ -17,6 +17,31 @@ type TurlarResponse = {
   }>;
 };
 
+export type TourDetail = {
+  id: string;
+  title: string;
+  coverImage?: string;
+  price?: number;
+  description?: string;
+  latitude?: number;
+  longitude?: number;
+};
+
+export async function getTourById(id: string): Promise<TourDetail> {
+  const res = await api.get(`/api/web/turlar/${id}`);
+  const raw = res.data;
+  const item = raw?.data ?? raw;
+  return {
+    id: item.id,
+    title: item.isim ?? "",
+    coverImage: item.gorsel,
+    price: item.fiyat?.tutar,
+    description: item.aciklama,
+    latitude: item.enlem,
+    longitude: item.boylam,
+  };
+}
+
 export async function getTours(): Promise<TourListItem[]> {
   const res = await api.get<TurlarResponse>("/api/web/turlar");
   const raw = res.data;

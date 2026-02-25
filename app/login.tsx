@@ -51,7 +51,7 @@ export default function LoginScreen() {
               <View style={styles.welcomeRow}>
                 <Text style={styles.welcomeText}>Hoş Geldiniz</Text>
                 <Image
-                  source={require('@/assets/logo-icon.jpg')}
+                  source={require('@/assets/logo-icon.png')}
                   style={styles.miniLogo}
                   resizeMode="contain"
                 />

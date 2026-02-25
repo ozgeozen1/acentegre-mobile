@@ -10,7 +10,15 @@ export const api = axios.create({
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    // Burada hata formatını standartlaştıracağız
+    console.log("AXIOS ERROR", {
+      message: err?.message,
+      code: err?.code,
+      url: err?.config?.url,
+      baseURL: err?.config?.baseURL,
+      status: err?.response?.status,
+      data: err?.response?.data,
+    });
+
     const message =
       err?.response?.data?.message ||
       err?.message ||

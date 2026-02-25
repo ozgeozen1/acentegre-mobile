@@ -3,6 +3,8 @@ import { FlatList, Text, View } from "react-native";
 import { getTours } from "../api/tours";
 
 export function ToursListScreen() {
+  console.log("BASE URL:", process.env.EXPO_PUBLIC_API_BASE_URL);
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["tours"],
     queryFn: getTours,
@@ -20,6 +22,11 @@ export function ToursListScreen() {
       <FlatList
         data={data ?? []}
         keyExtractor={(item) => item.id}
+        ListEmptyComponent={
+          <View style={{ paddingVertical: 24, alignItems: "center" }}>
+            <Text style={{ color: "#666" }}>Henüz tur yok.</Text>
+          </View>
+        }
         renderItem={({ item }) => (
           <View
             style={{

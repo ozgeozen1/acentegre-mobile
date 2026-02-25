@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Spacing, Radius, FontSize } from '@/constants/theme';
+import { Spacing, Radius, FontSize } from '@/constants/theme';
 
 interface StatCardProps {
   title: string;
@@ -9,43 +10,66 @@ interface StatCardProps {
   color?: string;
 }
 
-export default function StatCard({ title, value, icon, color = Colors.primary }: StatCardProps) {
+export default function StatCard({ title, value, icon, color = '#8B1A2B' }: StatCardProps) {
   return (
-    <View style={styles.card}>
-      <View style={[styles.iconWrap, { backgroundColor: color + '15' }]}>
-        <Ionicons name={icon} size={20} color={color} />
+    <LinearGradient
+      colors={[color, color + 'CC']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.card}
+    >
+      <View style={styles.topRow}>
+        <View style={styles.iconWrap}>
+          <Ionicons name={icon} size={18} color="#fff" />
+        </View>
+        <Ionicons name={icon} size={48} color="rgba(255,255,255,0.08)" style={styles.bgIcon} />
       </View>
       <Text style={styles.value} numberOfLines={1}>{value}</Text>
       <Text style={styles.title} numberOfLines={1}>{title}</Text>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    backgroundColor: Colors.surface,
-    borderRadius: Radius.md,
+    borderRadius: Radius.lg,
     padding: Spacing.md,
-    borderWidth: 1,
-    borderColor: Colors.border,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: Spacing.sm,
   },
   iconWrap: {
-    width: 36,
-    height: 36,
+    width: 34,
+    height: 34,
     borderRadius: 10,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
+  },
+  bgIcon: {
+    position: 'absolute',
+    right: -4,
+    top: -4,
   },
   value: {
     fontSize: FontSize.xl,
-    fontWeight: '700',
-    color: Colors.textPrimary,
+    fontWeight: '800',
+    color: '#fff',
     marginBottom: 2,
   },
   title: {
     fontSize: FontSize.xs,
-    color: Colors.textMuted,
+    color: 'rgba(255,255,255,0.7)',
+    fontWeight: '500',
   },
 });

@@ -50,13 +50,11 @@ export default function LoginScreen() {
             <View style={styles.glassInner}>
               <View style={styles.welcomeRow}>
                 <Text style={styles.welcomeText}>Hoş Geldiniz</Text>
-                <View style={styles.logoClip}>
-                  <Image
-                    source={require('@/assets/logo.jpg')}
-                    style={styles.miniLogo}
-                    resizeMode="cover"
-                  />
-                </View>
+                <Image
+                  source={require('@/assets/logo-icon.jpg')}
+                  style={styles.miniLogo}
+                  resizeMode="contain"
+                />
               </View>
               <Text style={styles.welcomeSub}>Devam etmek için giriş yapın</Text>
 
@@ -176,17 +174,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 6,
   },
-  logoClip: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    overflow: 'hidden',
-  },
   miniLogo: {
-    width: 72,
-    height: 72,
-    marginTop: -8,
-    marginLeft: -12,
+    width: 52,
+    height: 52,
   },
   welcomeText: {
     fontSize: 26,

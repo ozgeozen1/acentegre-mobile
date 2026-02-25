@@ -9,8 +9,8 @@ import { useAuth } from '@/src/auth/AuthContext';
 
 export default function LoginScreen() {
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('ozge.ozen@bixcod.com');
+  const [password, setPassword] = useState('Bixcod1923@');
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
 
